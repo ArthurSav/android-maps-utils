@@ -11,12 +11,6 @@ buildscript {
 
 apply plugin: 'com.android.application'
 
-dependencies {
-    compile project(':library')
-    // Or, fetch from Maven:
-    // compile 'com.google.maps.android:android-maps-utils:0.3+'
-    compile 'com.google.android.gms:play-services-maps:9.2.1'
-}
 
 android {
     compileSdkVersion 23
@@ -36,3 +30,11 @@ android {
         }
     }
 }
+
+dependencies {
+    compile project(':library')
+    // Or, fetch from Maven:
+    // compile 'com.google.maps.android:android-maps-utils:0.3+'
+    compile 'com.google.android.gms:play-services-maps:9.2.1'
+}
+
