@@ -18,8 +18,8 @@ package com.google.maps.android.utils.demo;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.SupportMapFragment;
 
 public abstract class BaseDemoActivity extends FragmentActivity {
     private GoogleMap mMap;
@@ -45,10 +45,10 @@ public abstract class BaseDemoActivity extends FragmentActivity {
         if (mMap != null) {
             return;
         }
-        mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
-        if (mMap != null) {
-            startDemo();
-        }
+        //mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMapAsync(null);
+//        if (mMap != null) {
+//            startDemo();
+//        }
     }
 
     /**
