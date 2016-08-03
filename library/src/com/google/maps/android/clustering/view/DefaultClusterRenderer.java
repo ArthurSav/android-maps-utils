@@ -137,6 +137,10 @@ public class DefaultClusterRenderer<T extends ClusterItem> implements ClusterRen
         mClusterManager = clusterManager;
     }
 
+    public int[] getBucket(){
+        return BUCKETS;
+    }
+
     @Override
     public void onAdd() {
         mClusterManager.getMarkerCollection().setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
