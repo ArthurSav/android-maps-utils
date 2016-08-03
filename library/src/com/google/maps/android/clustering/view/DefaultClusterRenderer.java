@@ -137,7 +137,7 @@ public class DefaultClusterRenderer<T extends ClusterItem> implements ClusterRen
         mClusterManager = clusterManager;
     }
 
-    public int[] getBucket(){
+    public int[] getClusterBucket(){
         return BUCKETS;
     }
 
@@ -213,7 +213,7 @@ public class DefaultClusterRenderer<T extends ClusterItem> implements ClusterRen
     }
 
     protected String getClusterText(int bucket) {
-        if (bucket < BUCKETS[0]) {
+        if (bucket < getClusterBucket()[0]) {
             return String.valueOf(bucket);
         }
         return String.valueOf(bucket) + "+";
@@ -225,15 +225,15 @@ public class DefaultClusterRenderer<T extends ClusterItem> implements ClusterRen
      */
     protected int getBucket(Cluster<T> cluster) {
         int size = cluster.getSize();
-        if (size <= BUCKETS[0]) {
+        if (size <= getClusterBucket()[0]) {
             return size;
         }
-        for (int i = 0; i < BUCKETS.length - 1; i++) {
-            if (size < BUCKETS[i + 1]) {
-                return BUCKETS[i];
+        for (int i = 0; i < getClusterBucket().length - 1; i++) {
+            if (size < getClusterBucket()[i + 1]) {
+                return getClusterBucket()[i];
             }
         }
-        return BUCKETS[BUCKETS.length - 1];
+        return getClusterBucket()[getClusterBucket().length - 1];
     }
 
     /**
