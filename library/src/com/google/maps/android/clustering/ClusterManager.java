@@ -43,8 +43,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * ClusterManager should be added to the map as an: <ul> <li>{@link com.google.android.gms.maps.GoogleMap.OnCameraChangeListener}</li>
  * <li>{@link com.google.android.gms.maps.GoogleMap.OnMarkerClickListener}</li> </ul>
  */
-public class ClusterManager<T extends ClusterItem> implements GoogleMap.OnCameraChangeListener,
-        GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener {
+public class ClusterManager<T extends ClusterItem> implements GoogleMap.OnCameraIdleListener, GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener {
 
     private final MarkerManager mMarkerManager;
     private final MarkerManager.Collection mMarkers;
@@ -187,30 +186,6 @@ public class ClusterManager<T extends ClusterItem> implements GoogleMap.OnCamera
         }
     }
 
-    /**
-     * Might re-cluster.
-     *
-     * @param cameraPosition
-     */
-    @Override
-    public void onCameraChange(CameraPosition cameraPosition) {
-        if (mRenderer instanceof GoogleMap.OnCameraChangeListener) {
-            ((GoogleMap.OnCameraChangeListener) mRenderer).onCameraChange(cameraPosition);
-        }
-
-        mAlgorithm.onCameraChange(cameraPosition);
-
-        // delegate clustering to the algorithm
-        if (mAlgorithm.shouldReclusterOnMapMovement()) {
-            cluster();
-
-        // Don't re-compute clusters if the map has just been panned/tilted/rotated.
-        } else if (mPreviousCameraPosition == null || mPreviousCameraPosition.zoom != cameraPosition.zoom) {
-            mPreviousCameraPosition = mMap.getCameraPosition();
-            cluster();
-        }
-    }
-
     @Override
     public boolean onMarkerClick(Marker marker) {
         return getMarkerManager().onMarkerClick(marker);
@@ -219,6 +194,22 @@ public class ClusterManager<T extends ClusterItem> implements GoogleMap.OnCamera
     @Override
     public void onInfoWindowClick(Marker marker) {
         getMarkerManager().onInfoWindowClick(marker);
+    }
+
+    @Override
+    public void onCameraIdle() {
+        if (mRenderer instanceof GoogleMap.OnCameraIdleListener) {
+            ((GoogleMap.OnCameraIdleListener) mRenderer).onCameraIdle();
+        }
+
+        // Don't re-compute clusters if the map has just been panned/tilted/rotated.
+        CameraPosition position = mMap.getCameraPosition();
+        if (mPreviousCameraPosition != null && mPreviousCameraPosition.zoom == position.zoom) {
+            return;
+        }
+        mPreviousCameraPosition = mMap.getCameraPosition();
+
+        cluster();
     }
 
     /**
